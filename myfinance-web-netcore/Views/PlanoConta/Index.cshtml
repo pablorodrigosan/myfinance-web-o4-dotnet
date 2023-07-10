@@ -28,7 +28,7 @@
                     <td>@item.Descricao</td>
                     <td>@item.Tipo</td>
                     <td><button type="button" class="btn btn-warning" onclick="Editar(@item.Id)">Editar</button></td>
-                    <td><button type="button" class="btn btn-danger">Excluir</button></td>
+                    <td>@Html.ActionLink("Excluir", "Excluir", "PlanoConta", new { Id = @item.Id }, new { @class = "btn btn-danger" })</td>
                 </tr>
             }
         }

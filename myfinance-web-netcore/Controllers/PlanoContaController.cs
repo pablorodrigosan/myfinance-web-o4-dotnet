@@ -50,7 +50,9 @@ namespace myfinance_web_netcore.Controllers
 
             if (id != null)
             {
-                var PlanoContaDomain = _myFinanceDbContext.PlanoConta.Where(x => x.Id == id).FirstOrDefault();
+                var PlanoContaDomain = _myFinanceDbContext.PlanoConta
+                .Where(x => x.Id == id)
+                .FirstOrDefault();
 
                 planoConta.Id = PlanoContaDomain.Id;
                 planoConta.Descricao = PlanoContaDomain.Descricao;
@@ -78,6 +80,17 @@ namespace myfinance_web_netcore.Controllers
                 _myFinanceDbContext.Entry(planoConta).State = EntityState.Modified;
             }
 
+            _myFinanceDbContext.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        [Route("Excluir/{id}")]
+        public IActionResult Excluir(int id)
+        {
+            var planoConta = new PlanoConta() { Id = id };
+            _myFinanceDbContext.PlanoConta.Remove(planoConta);
             _myFinanceDbContext.SaveChanges();
 
             return RedirectToAction("Index");
