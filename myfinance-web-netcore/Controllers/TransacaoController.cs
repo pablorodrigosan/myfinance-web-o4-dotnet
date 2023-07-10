@@ -69,6 +69,16 @@ namespace myfinance_web_netcore.Controllers
 
             transacaoModel.PlanoContas = itensPlano;
 
+            if (id != null)
+            {
+                var transacao = _myFinanceDbContext.Transacao.Where(x => x.Id == id).FirstOrDefault();
+                transacaoModel.Data = transacao.Data;
+                transacaoModel.Historico = transacao.Historico;
+                transacaoModel.Valor = transacao.Valor;
+                transacaoModel.PlanoContaId = transacao.PlanoContaId;
+            }
+
+
             return View(transacaoModel);
         }
 
