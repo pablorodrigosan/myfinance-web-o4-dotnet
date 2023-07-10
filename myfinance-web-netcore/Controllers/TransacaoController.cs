@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using myfinance_web_netcore.Domain;
 using myfinance_web_netcore.Models;
@@ -22,18 +23,25 @@ namespace myfinance_web_netcore.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            var listaTransacao = _myFinanceDbContext.Transacao;
+            var listaTransacao = _myFinanceDbContext.Transacao.Include(x => x.PlanoConta);
             var listaTransacaoModel = new List<TransacaoModel>();
 
             foreach (var item in listaTransacao)
             {
-                var transacaoModel = new TransacaoModel()
+                var PlanoContaModel = new PlanoContaModel()
                 {
+                    Id = item.PlanoConta.Id,
+                    Descricao = item.PlanoConta.Descricao,
+                    Tipo = item.PlanoConta.Tipo
+                };
+                
+                var transacaoModel = new TransacaoModel(){
                     Id = item.Id,
                     Historico = item.Historico,
                     Data = item.Data,
                     Valor = item.Valor,
                     PlanoContaId = item.PlanoContaId,
+                    ItemPlanoConta = PlanoContaModel
                 };
 
                 listaTransacaoModel.Add(transacaoModel);
@@ -49,20 +57,19 @@ namespace myfinance_web_netcore.Controllers
         [Route("Cadastro/{id}")]
         public IActionResult Cadastro(int? id)
         {
-            var planoConta = new PlanoContaModel();
+            var itensPlanoConta = _myFinanceDbContext.PlanoConta;
 
-            if (id != null)
+            var transacaoModel = new TransacaoModel();
+
+            List<SelectListItem> itensPlano = new();
+            foreach(var item in itensPlanoConta)
             {
-                var PlanoContaDomain = _myFinanceDbContext.PlanoConta
-                .Where(x => x.Id == id)
-                .FirstOrDefault();
-
-                planoConta.Id = PlanoContaDomain.Id;
-                planoConta.Descricao = PlanoContaDomain.Descricao;
-                planoConta.Tipo = PlanoContaDomain.Tipo;
+            itensPlano.Add(new SelectListItem() { Text = item.Descricao, Value = item.Id.ToString() });
             }
 
-            return View(planoConta);
+            transacaoModel.PlanoContas = itensPlano;
+
+            return View(transacaoModel);
         }
 
         [HttpPost]
