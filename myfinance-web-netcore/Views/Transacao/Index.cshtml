@@ -1,0 +1,56 @@
+﻿@{
+    ViewData["Title"] = "Transações Financeiras";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<button type="button" class="btn btn-primary btn-lg" onclick="Novo()">Registrar Transação</button>
+
+<hr />
+
+<table class="table table-dark table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Data</th>
+            <th scope="col">Histórico</th>
+            <th scope="col">Valor</th>
+            @* <th scope="col">Tipo Operação</th>
+            <th scope="col">Plano Conta</th> *@
+            <th scope="col">#</th>
+            <th scope="col">#</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            foreach (var item in (List<TransacaoModel>)ViewBag.Transacoes)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Data</td>
+                    <td>@item.Historico</td>
+                    <td>@item.Valor</td>
+                    @* <td>@item.ItemPlanoConta.Tipo</td>
+                    <td>@item.ItemPlanoConta.Descricao</td> *@
+                    <td><button type="button" class="btn btn-outline-warning" onclick="Editar(@item.Id)">Editar</button></td>
+                    <td><button type="button" class="btn btn-outline-warning" onclick="Editar(@item.Id)">Editar</button></td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<script>  
+    function Novo()
+    {
+        window.location.href = "../Transacao/Cadastro"
+    }
+
+    function Excluir(id) {
+        window.location.href = "../Transacao/Excluir/" + id
+    }
+
+     function Editar(id) {
+        window.location.href = "../Transacao/Cadastro/" + id
+    }
+</script>
