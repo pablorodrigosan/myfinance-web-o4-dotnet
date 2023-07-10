@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using myfinance_web_netcore.Domain;
 using myfinance_web_netcore.Models;
 
@@ -61,17 +62,22 @@ namespace myfinance_web_netcore.Controllers
 
         [HttpPost]
         [Route("Cadastro")]
-        [Route("Cadastro/{input}")]
+        [Route("Cadastro/{id}")]
         public IActionResult Cadastro(PlanoContaModel input)
         {
-            var planoConta = new PlanoConta()
-            {
+            var planoConta = new PlanoConta(){
                 Id = input.Id,
                 Descricao = input.Descricao,
                 Tipo = input.Tipo
             };
 
-            _myFinanceDbContext.PlanoConta.Add(planoConta);
+            if (planoConta.Id == null)
+                _myFinanceDbContext.PlanoConta.Add(planoConta);
+            else{
+                _myFinanceDbContext.PlanoConta.Attach(planoConta);
+                _myFinanceDbContext.Entry(planoConta).State = EntityState.Modified;
+            }
+
             _myFinanceDbContext.SaveChanges();
 
             return RedirectToAction("Index");
