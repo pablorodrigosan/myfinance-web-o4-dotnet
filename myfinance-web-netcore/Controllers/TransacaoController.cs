@@ -75,21 +75,23 @@ namespace myfinance_web_netcore.Controllers
         [HttpPost]
         [Route("Cadastro")]
         [Route("Cadastro/{id}")]
-        public IActionResult Cadastro(PlanoContaModel input)
+        public IActionResult Cadastro(TransacaoModel input)
         {
-            var planoConta = new PlanoConta()
+            var transacao = new Transacao()
             {
                 Id = input.Id,
-                Descricao = input.Descricao,
-                Tipo = input.Tipo
+                Historico = input.Historico,
+                Data = input.Data,
+                Valor = input.Valor,
+                PlanoContaId = input.PlanoContaId
             };
 
-            if (planoConta.Id == null)
-                _myFinanceDbContext.PlanoConta.Add(planoConta);
+            if (transacao.Id == null)
+                _myFinanceDbContext.Transacao.Add(transacao);
             else
             {
-                _myFinanceDbContext.PlanoConta.Attach(planoConta);
-                _myFinanceDbContext.Entry(planoConta).State = EntityState.Modified;
+                _myFinanceDbContext.Transacao.Attach(transacao);
+                _myFinanceDbContext.Entry(transacao).State = EntityState.Modified;
             }
 
             _myFinanceDbContext.SaveChanges();
