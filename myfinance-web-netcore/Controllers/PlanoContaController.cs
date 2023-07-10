@@ -45,7 +45,18 @@ namespace myfinance_web_netcore.Controllers
         [Route("Cadastro/{id}")]
         public IActionResult Cadastro(int? id)
         {
-            return View();
+            var planoConta = new PlanoContaModel();
+
+            if (id != null)
+            {
+                var PlanoContaDomain = _myFinanceDbContext.PlanoConta.Where(x => x.Id == id).FirstOrDefault();
+
+                planoConta.Id = PlanoContaDomain.Id;
+                planoConta.Descricao = PlanoContaDomain.Descricao;
+                planoConta.Tipo = PlanoContaDomain.Tipo;
+            }
+
+            return View(planoConta);
         }
 
         [HttpPost]
@@ -53,7 +64,8 @@ namespace myfinance_web_netcore.Controllers
         [Route("Cadastro/{input}")]
         public IActionResult Cadastro(PlanoContaModel input)
         {
-            var planoConta = new PlanoConta(){
+            var planoConta = new PlanoConta()
+            {
                 Id = input.Id,
                 Descricao = input.Descricao,
                 Tipo = input.Tipo
