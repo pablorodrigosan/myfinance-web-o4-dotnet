@@ -113,8 +113,8 @@ namespace myfinance_web_netcore.Controllers
         [Route("Excluir/{id}")]
         public IActionResult Excluir(int id)
         {
-            var planoConta = new PlanoConta() { Id = id };
-            _myFinanceDbContext.PlanoConta.Remove(planoConta);
+            var transacao = new Transacao() { Id = id };
+            _myFinanceDbContext.Transacao.Remove(transacao);
             _myFinanceDbContext.SaveChanges();
 
             return RedirectToAction("Index");
